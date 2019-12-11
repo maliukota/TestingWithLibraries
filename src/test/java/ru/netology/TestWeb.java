@@ -14,55 +14,42 @@ import static com.codeborne.selenide.Selenide.open;
 public class TestWeb {
     public static final String WEBSITE = "http://localhost:9999";
     DataGenerator dataGenerator = new DataGenerator();
+    String city = dataGenerator.city;
+    String name = dataGenerator.lastName + " " + dataGenerator.firstName;
+    String phone = dataGenerator.phone;
 
-    @DisplayName("Filling the fields with random values from Faker")
+    @DisplayName("Заполнить поля формы дважды одинаковыми значениями, кроме даты, проверить появление окна с вопросом" +
+            " о перепланировке даты встречи ")
     @Test
     void shouldFillForm() {
-
         open(WEBSITE);
-        $("[placeholder='Город']").setValue(dataGenerator.city);
+
+        //первичное заполнение полей
+        $("[placeholder='Город']").setValue(city);
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
         $("[placeholder='Дата встречи']").setValue(dataGenerator.setNewDate());
 
-        $("[name='name']").setValue(dataGenerator.firstName + " " + dataGenerator.lastName);
-        $("[name='phone']").setValue(dataGenerator.phone);
+        $("[name='name']").setValue(name);
+        $("[name='phone']").setValue(phone);
 
         $("[data-test-id='agreement']").click();
         $(byClassName("button")).click();
         $(withText("Успешно!")).shouldBe(visible);
-    }
 
-    @DisplayName("Filling the fields with static values")
-    @Test
-    void shouldFillFormAgain() {
-        open(WEBSITE);
-        $("[placeholder='Город']").setValue("Барнаул");
+        //повторное заполнение полей
+        $("[placeholder='Город']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+        $("[placeholder='Город']").setValue(city);
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[placeholder='Дата встречи']").setValue(dataGenerator.setNewDate());
+        $("[placeholder='Дата встречи']").setValue(dataGenerator.setFutureDate()); //новая дата
 
-        $("[name='name']").setValue("ПЕТРОВ ИВАН");
-        $("[name='phone']").setValue("+79999999999");
+        $("[name='name']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+        $("[name='name']").setValue(name);
 
-        $("[data-test-id='agreement']").click();
-        $(byClassName("button")).click();
-        $(withText("Успешно!")).shouldBe(visible);
-    }
+        $("[name='phone']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+        $("[name='phone']").setValue(phone);
 
-    @DisplayName("Filling the fields with static values and different date")
-    @Test
-    void shouldFillFormWithAnotherDate() {
-        open(WEBSITE);
-        $("[placeholder='Город']").setValue("Барнаул");
-
-        $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[placeholder='Дата встречи']").setValue(dataGenerator.setFutureDate());
-
-        $("[name='name']").setValue("ПЕТРОВ ИВАН");
-        $("[name='phone']").setValue("+79999999999");
-
-        $("[data-test-id='agreement']").click();
         $(byClassName("button")).click();
         $(withText("Необходимо подтверждение")).shouldBe(visible);
         $(withText("Перепланировать")).click();
