@@ -25,7 +25,6 @@ public class TestWeb {
         $("[placeholder='Дата встречи']").setValue(dataGenerator.setNewDate());
 
         $("[name='name']").setValue(dataGenerator.firstName + " " + dataGenerator.lastName);
-
         $("[name='phone']").setValue(dataGenerator.phone);
 
         $("[data-test-id='agreement']").click();
@@ -43,7 +42,6 @@ public class TestWeb {
         $("[placeholder='Дата встречи']").setValue(dataGenerator.setNewDate());
 
         $("[name='name']").setValue("ПЕТРОВ ИВАН");
-
         $("[name='phone']").setValue("+79999999999");
 
         $("[data-test-id='agreement']").click();
@@ -61,7 +59,6 @@ public class TestWeb {
         $("[placeholder='Дата встречи']").setValue(dataGenerator.setFutureDate());
 
         $("[name='name']").setValue("ПЕТРОВ ИВАН");
-
         $("[name='phone']").setValue("+79999999999");
 
         $("[data-test-id='agreement']").click();
