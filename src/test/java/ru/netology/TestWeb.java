@@ -12,13 +12,14 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestWeb {
+    public static final String WEBSITE = "http://localhost:9999";
     DataGenerator dataGenerator = new DataGenerator();
 
     @DisplayName("Filling the fields with random values from Faker")
     @Test
     void shouldFillForm() {
 
-        open("http://localhost:9999");
+        open(WEBSITE);
         $("[placeholder='Город']").setValue(dataGenerator.city);
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
@@ -35,7 +36,7 @@ public class TestWeb {
     @DisplayName("Filling the fields with static values")
     @Test
     void shouldFillFormAgain() {
-        open("http://localhost:9999");
+        open(WEBSITE);
         $("[placeholder='Город']").setValue("Барнаул");
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
@@ -52,7 +53,7 @@ public class TestWeb {
     @DisplayName("Filling the fields with static values and different date")
     @Test
     void shouldFillFormWithAnotherDate() {
-        open("http://localhost:9999");
+        open(WEBSITE);
         $("[placeholder='Город']").setValue("Барнаул");
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
