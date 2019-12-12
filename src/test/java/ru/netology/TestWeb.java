@@ -12,11 +12,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class TestWeb {
-    public static final String WEBSITE = "http://localhost:9999";
-    DataGenerator dataGenerator = new DataGenerator();
-    String city = dataGenerator.city;
-    String name = dataGenerator.lastName + " " + dataGenerator.firstName;
-    String phone = dataGenerator.phone;
+    private static final String WEBSITE = "http://localhost:9999";
 
     @DisplayName("Заполнить поля формы дважды одинаковыми значениями, кроме даты, проверить появление окна с вопросом" +
             " о перепланировке даты встречи ")
@@ -25,13 +21,13 @@ public class TestWeb {
         open(WEBSITE);
 
         //первичное заполнение полей
-        $("[placeholder='Город']").setValue(city);
+        $("[placeholder='Город']").setValue(DataGenerator.getCity());
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[placeholder='Дата встречи']").setValue(dataGenerator.setNewDate());
+        $("[placeholder='Дата встречи']").setValue(DataGenerator.getNewDate());
 
-        $("[name='name']").setValue(name);
-        $("[name='phone']").setValue(phone);
+        $("[name='name']").setValue(DataGenerator.getName());
+        $("[name='phone']").setValue(DataGenerator.getPhone());
 
         $("[data-test-id='agreement']").click();
         $(byClassName("button")).click();
@@ -39,16 +35,16 @@ public class TestWeb {
 
         //повторное заполнение полей
         $("[placeholder='Город']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[placeholder='Город']").setValue(city);
+        $("[placeholder='Город']").setValue(DataGenerator.getCity());
 
         $("[placeholder='Дата встречи']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[placeholder='Дата встречи']").setValue(dataGenerator.setFutureDate()); //новая дата
+        $("[placeholder='Дата встречи']").setValue(DataGenerator.getFutureDate()); //новая дата
 
         $("[name='name']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[name='name']").setValue(name);
+        $("[name='name']").setValue(DataGenerator.getName());
 
         $("[name='phone']").sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
-        $("[name='phone']").setValue(phone);
+        $("[name='phone']").setValue(DataGenerator.getPhone());
 
         $(byClassName("button")).click();
         $(withText("Необходимо подтверждение")).shouldBe(visible);
